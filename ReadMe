@@ -1,87 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hashing API Documentation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        code {
-            background: #f4f4f4;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-        .endpoint {
-            background: #e7f3ff;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Hashing API Documentation</h1>
-    <p>This API provides endpoints for encoding and decoding sensitive data such as credit card numbers, PAN card numbers, and email addresses.</p>
+# Secure Data Hashing API
 
-    <h2>Endpoints</h2>
+## Overview
+This API provides endpoints to securely hash and encode sensitive user data such as credit card numbers, PAN card details, and email addresses. It uses bcrypt for hashing and allows scheduled encoding across all collections in the database.
 
-    <div class="endpoint">
-        <h3>GET /</h3>
-        <p>Fetch all users and hash sensitive fields.</p>
-        <p><strong>Response:</strong></p>
-        <pre>{"message": "Successfully hashed sensitive fields", "totalUpdated": 5}</pre>
-    </div>
+## Features
+- Hashes sensitive fields dynamically based on regex patterns.
+- Periodic encoding of database records every 10 seconds.
+- Ability to start and stop encoding dynamically.
+- Secure hashing using SHA-256.
+- Decoding functionality to retrieve original values.
 
-    <div class="endpoint">
-        <h3>GET /encode</h3>
-        <p>Starts an encoding process that runs every 10 seconds.</p>
-        <p><strong>Response:</strong></p>
-        <pre>{"message": "Encoding started, running every 10 seconds."}</pre>
-    </div>
+## Installation
+1. Clone the repository:
+   ```sh
+   git clone <repo-url>
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd node-hashing-app
+   ```
+3. Install dependencies:
+   ```sh
+   npm install
+   ```
+4. Set up environment variables:
+   - Create a `.env` file in the root directory.
+   - Add the following configuration:
+     ```sh
+     REGEX_PATTERNS={"creditCard":"^\\d{4}-\\d{4}-\\d{4}-\\d{4}$", "pancard":"^[A-Z]{5}[0-9]{4}[A-Z]{1}$", "email":"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"}
+     ```
 
-    <div class="endpoint">
-        <h3>GET /stop-encode</h3>
-        <p>Stops the automatic encoding process.</p>
-        <p><strong>Response:</strong></p>
-        <pre>{"message": "Encoding process stopped."}</pre>
-    </div>
+## Usage
 
-    <div class="endpoint">
-        <h3>GET /decode</h3>
-        <p>Decodes user data and retrieves original values.</p>
-        <p><strong>Response:</strong></p>
-        <pre>{"message": "Decoded values logged to console."}</pre>
-    </div>
+### Start the Server
+```sh
+node server.js
+```
 
-    <h2>Regex Patterns</h2>
-    <p>The API reads regex patterns from the environment variables for validation.</p>
-    <ul>
-        <li>Credit Card: <code>/^\d{4}-\d{4}-\d{4}-\d{4}$/</code></li>
-        <li>PAN Card: <code>/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/</code></li>
-        <li>Email: <code>/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/</code></li>
-    </ul>
+### API Endpoints
 
-    <h2>Installation</h2>
-    <pre>
-    npm install
-    npm start
-    </pre>
+#### Fetch and Hash Users
+- **Endpoint:** `GET /`
+- **Description:** Fetches all users and hashes their sensitive data fields.
+- **Response:**
+  ```json
+  {
+    "message": "Successfully hashed sensitive fields (Credit Card & PAN Card).",
+    "totalUpdated": 5
+  }
+  ```
 
-    <h2>Environment Variables</h2>
-    <p>Define regex patterns in a <code>.env</code> file:</p>
-    <pre>
-    REGEX_PATTERNS={
-        "creditCard": "^\\d{4}-\\d{4}-\\d{4}-\\d{4}$",
-        "pancard": "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
-        "email": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-    }
-    </pre>
-</body>
-</html>
+#### Start Automatic Encoding
+- **Endpoint:** `GET /encode`
+- **Description:** Starts a process that automatically hashes sensitive fields every 10 seconds.
+- **Response:**
+  ```json
+  { "message": "Encoding started, running every 10 seconds." }
+  ```
+
+#### Stop Automatic Encoding
+- **Endpoint:** `GET /stop-encode`
+- **Description:** Stops the ongoing encoding process.
+- **Response:**
+  ```json
+  { "message": "Encoding process stopped." }
+  ```
+
+#### Decode Data
+- **Endpoint:** `GET /decode`
+- **Description:** Decodes the hashed user data.
+- **Response:**
+  ```json
+  { "message": "Decoded values logged to console." }
+  ```
+
+## How It Works
+1. The API fetches all users from the database.
+2. It iterates over all fields and checks them against regex patterns.
+3. If a field matches a pattern, it is hashed and stored securely.
+4. The encoding process can run periodically every 10 seconds.
+5. Decoding is possible for PAN card and credit card fields using Base64.
+
+## Technologies Used
+- Node.js
+- Express.js
+- Mongoose
+- Bcrypt
+- SHA-256 Hashing
+- MongoDB
+
+## License
+This project is licensed under the MIT License.
+
+## Author
+Developed by **Alok Singh Thakur** 🚀
+
