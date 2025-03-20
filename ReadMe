@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashing API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .endpoint {
+            background: #e7f3ff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hashing API Documentation</h1>
+    <p>This API provides endpoints for encoding and decoding sensitive data such as credit card numbers, PAN card numbers, and email addresses.</p>
+
+    <h2>Endpoints</h2>
+
+    <div class="endpoint">
+        <h3>GET /</h3>
+        <p>Fetch all users and hash sensitive fields.</p>
+        <p><strong>Response:</strong></p>
+        <pre>{"message": "Successfully hashed sensitive fields", "totalUpdated": 5}</pre>
+    </div>
+
+    <div class="endpoint">
+        <h3>GET /encode</h3>
+        <p>Starts an encoding process that runs every 10 seconds.</p>
+        <p><strong>Response:</strong></p>
+        <pre>{"message": "Encoding started, running every 10 seconds."}</pre>
+    </div>
+
+    <div class="endpoint">
+        <h3>GET /stop-encode</h3>
+        <p>Stops the automatic encoding process.</p>
+        <p><strong>Response:</strong></p>
+        <pre>{"message": "Encoding process stopped."}</pre>
+    </div>
+
+    <div class="endpoint">
+        <h3>GET /decode</h3>
+        <p>Decodes user data and retrieves original values.</p>
+        <p><strong>Response:</strong></p>
+        <pre>{"message": "Decoded values logged to console."}</pre>
+    </div>
+
+    <h2>Regex Patterns</h2>
+    <p>The API reads regex patterns from the environment variables for validation.</p>
+    <ul>
+        <li>Credit Card: <code>/^\d{4}-\d{4}-\d{4}-\d{4}$/</code></li>
+        <li>PAN Card: <code>/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/</code></li>
+        <li>Email: <code>/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/</code></li>
+    </ul>
+
+    <h2>Installation</h2>
+    <pre>
+    npm install
+    npm start
+    </pre>
+
+    <h2>Environment Variables</h2>
+    <p>Define regex patterns in a <code>.env</code> file:</p>
+    <pre>
+    REGEX_PATTERNS={
+        "creditCard": "^\\d{4}-\\d{4}-\\d{4}-\\d{4}$",
+        "pancard": "^[A-Z]{5}[0-9]{4}[A-Z]{1}$",
+        "email": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+    }
+    </pre>
+</body>
+</html>
